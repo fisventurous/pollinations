@@ -86,6 +86,8 @@ export const callSeedreamAPI = async (
             "ByteDance Seedream",
             `Image generation failed \u2014 the upstream provider (ByteDance Seedream) encountered an error. Please try again later.`,
             500,
+            undefined,
+            error.message,
         );
     }
 };
@@ -161,6 +163,8 @@ export const callSeedreamProAPI = async (
             "ByteDance Seedream",
             `Image generation failed \u2014 the upstream provider (ByteDance Seedream) encountered an error. Please try again later.`,
             500,
+            undefined,
+            error.message,
         );
     }
 };
@@ -291,6 +295,7 @@ async function generateWithSeedream(
             `Image generation failed \u2014 the upstream provider (ByteDance Seedream) returned an error (${response.status}). Please try again later.`,
             response.status,
             response.status,
+            errorText,
         );
     }
 
@@ -303,6 +308,8 @@ async function generateWithSeedream(
             "ByteDance Seedream",
             `Image generation failed \u2014 the upstream provider (ByteDance Seedream) returned an invalid response.`,
             500,
+            undefined,
+            data,
         );
     }
 

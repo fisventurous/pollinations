@@ -155,6 +155,7 @@ async function enqueueLtx2Job(
             `Video generation failed \u2014 the upstream provider (Modal LTX-2) returned an error (${response.status}). Please try again later.`,
             response.status,
             response.status,
+            errorText,
         );
     }
 
@@ -165,6 +166,8 @@ async function enqueueLtx2Job(
             "Modal LTX-2",
             `Video generation failed \u2014 the upstream provider (Modal LTX-2) returned an invalid response.`,
             500,
+            undefined,
+            data,
         );
     }
 
@@ -233,6 +236,8 @@ async function pollLtx2Status(
                     "Modal LTX-2",
                     `Video generation failed \u2014 the upstream provider (Modal LTX-2) reported an error. Please try again later.`,
                     500,
+                    undefined,
+                    data.error,
                 );
             }
 
@@ -282,6 +287,7 @@ async function fetchLtx2Result(promptId: string): Promise<Buffer> {
             `Video generation failed \u2014 could not retrieve the result from the upstream provider (Modal LTX-2). Status: ${response.status}.`,
             response.status,
             response.status,
+            errorText,
         );
     }
 

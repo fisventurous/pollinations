@@ -809,6 +809,7 @@ const callAzureGPTImageWithEndpoint = async (
             `Image generation failed \u2014 the upstream provider (Azure GPT Image) returned an error (${response.status}). Please try again later.`,
             response.status,
             response.status,
+            errorText,
         );
     }
 
@@ -820,6 +821,8 @@ const callAzureGPTImageWithEndpoint = async (
             "Azure GPT Image",
             `Image generation failed \u2014 the upstream provider (Azure GPT Image) returned an invalid response.`,
             500,
+            undefined,
+            data,
         );
     }
 

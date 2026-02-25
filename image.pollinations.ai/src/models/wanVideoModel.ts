@@ -581,6 +581,7 @@ async function createDashScopeTask(
             `Video generation failed \u2014 the upstream provider (Alibaba Wan) returned an error (${response.status}). Please try again later.`,
             response.status,
             response.status,
+            errorText,
         );
     }
 
@@ -593,6 +594,8 @@ async function createDashScopeTask(
             "Alibaba Wan",
             `Video generation failed \u2014 the upstream provider (Alibaba Wan) returned an error. Please try again later.`,
             400,
+            undefined,
+            { code: data.code, message: data.message },
         );
     }
 
@@ -603,6 +606,8 @@ async function createDashScopeTask(
             "Alibaba Wan",
             `Video generation failed \u2014 the upstream provider (Alibaba Wan) returned an invalid response.`,
             500,
+            undefined,
+            data,
         );
     }
 
@@ -662,6 +667,8 @@ async function pollWanTask(
                 "Alibaba Wan",
                 `Video generation failed \u2014 the upstream provider (Alibaba Wan) reported an error: ${pollResult.error}. Please try again later.`,
                 500,
+                undefined,
+                pollResult.error,
             );
         }
 

@@ -230,6 +230,7 @@ async function generateSeedanceVideo(
             `Video generation failed \u2014 the upstream provider (BytePlus Seedance) returned an error (${generateResponse.status}). Please try again later.`,
             generateResponse.status,
             generateResponse.status,
+            errorText,
         );
     }
 
@@ -243,6 +244,8 @@ async function generateSeedanceVideo(
             "BytePlus Seedance",
             `Video generation failed \u2014 the upstream provider (BytePlus Seedance) returned an invalid response.`,
             500,
+            undefined,
+            generateData,
         );
     }
 
@@ -374,6 +377,8 @@ async function pollSeedanceTask(
                     "BytePlus Seedance",
                     `Video generation failed \u2014 the upstream provider (BytePlus Seedance) returned no video URL.`,
                     500,
+                    undefined,
+                    pollData,
                 );
             }
 
@@ -424,6 +429,8 @@ async function pollSeedanceTask(
                 "BytePlus Seedance",
                 `Video generation failed \u2014 the upstream provider (BytePlus Seedance) reported an error. Please try again later.`,
                 500,
+                undefined,
+                pollData.error,
             );
         }
 

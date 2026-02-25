@@ -245,6 +245,7 @@ export const callVeoAPI = async (
             `Video generation failed \u2014 the upstream provider (Google Veo) returned an error (${generateResponse.status}). Please try again later.`,
             generateResponse.status,
             generateResponse.status,
+            errorText,
         );
     }
 
@@ -257,6 +258,8 @@ export const callVeoAPI = async (
             "Google Veo",
             `Video generation failed \u2014 the upstream provider (Google Veo) returned an invalid response.`,
             500,
+            undefined,
+            generateData,
         );
     }
 
@@ -369,6 +372,7 @@ async function pollVeoOperation(
                     `Video generation failed \u2014 the upstream provider (Google Veo) reported an error (${errorCode}). Please try again later.`,
                     isClientError ? 400 : 500,
                     errorCode,
+                    pollData.error,
                 );
             }
 
@@ -399,6 +403,8 @@ async function pollVeoOperation(
                         "Google Veo",
                         `Video generation failed \u2014 the upstream provider (Google Veo) returned an unsupported response format.`,
                         500,
+                        undefined,
+                        { gcsUri: video.gcsUri },
                     );
                 }
             }
@@ -407,6 +413,8 @@ async function pollVeoOperation(
                 "Google Veo",
                 `Video generation failed \u2014 the upstream provider (Google Veo) returned no video data.`,
                 500,
+                undefined,
+                pollData,
             );
         }
 

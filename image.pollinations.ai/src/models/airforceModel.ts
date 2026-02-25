@@ -239,6 +239,7 @@ async function handleApiError(
         `Image generation failed \u2014 the upstream provider (api.airforce) returned an error (${response.status}). Please try again later.`,
         response.status,
         response.status,
+        errorText,
     );
 }
 
@@ -262,6 +263,8 @@ async function processApiResponse(
             "api.airforce",
             `Image generation failed \u2014 the upstream provider (api.airforce) returned an invalid response for model ${airforceModel}.`,
             500,
+            undefined,
+            data,
         );
     }
 
@@ -277,6 +280,8 @@ async function processApiResponse(
         "api.airforce",
         `Image generation failed \u2014 the upstream provider (api.airforce) returned no data for model ${airforceModel}.`,
         500,
+        undefined,
+        data,
     );
 }
 
@@ -314,6 +319,8 @@ async function processSseResponse(
                     "api.airforce",
                     `Image generation failed \u2014 the upstream provider (api.airforce) reported an error for model ${airforceModel}. Please try again later.`,
                     500,
+                    undefined,
+                    parsed.error,
                 );
             }
             const url = parsed.data?.[0]?.url;
@@ -331,6 +338,8 @@ async function processSseResponse(
             "api.airforce",
             `Image generation failed \u2014 the upstream provider (api.airforce) did not return a result for model ${airforceModel}.`,
             500,
+            undefined,
+            text,
         );
     }
 

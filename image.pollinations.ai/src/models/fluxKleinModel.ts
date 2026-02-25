@@ -93,6 +93,8 @@ export const callFluxKleinAPI = async (
             "Modal Flux Klein",
             `Image generation failed \u2014 the upstream provider (Modal Flux Klein) encountered an error. Please try again later.`,
             500,
+            undefined,
+            error.message,
         );
     }
 };
@@ -145,6 +147,7 @@ async function generateTextToImage(
             `Image generation failed \u2014 the upstream provider (Modal Flux Klein) returned an error (${response.status}). Please try again later.`,
             response.status,
             response.status,
+            errorText,
         );
     }
 
@@ -278,6 +281,7 @@ async function generateWithEditing(
             `Image editing failed \u2014 the upstream provider (Modal Flux Klein) returned an error (${response.status}). Please try again later.`,
             response.status,
             response.status,
+            errorText,
         );
     }
 

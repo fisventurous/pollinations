@@ -199,6 +199,8 @@ export async function callAzureFluxKontext(
                 "Azure Flux Kontext",
                 `Image editing failed \u2014 the upstream provider (Azure Flux Kontext) could not process the image.`,
                 500,
+                undefined,
+                error.message,
             );
         }
 
@@ -242,6 +244,7 @@ export async function callAzureFluxKontext(
             `Image generation failed \u2014 the upstream provider (Azure Flux Kontext) returned an error (${response.status}). Please try again later.`,
             response.status,
             response.status,
+            errorText,
         );
     }
 
@@ -253,6 +256,8 @@ export async function callAzureFluxKontext(
             "Azure Flux Kontext",
             `Image generation failed \u2014 the upstream provider (Azure Flux Kontext) returned an invalid response.`,
             500,
+            undefined,
+            data,
         );
     }
 

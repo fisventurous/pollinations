@@ -524,9 +524,11 @@ const checkCacheAndGenerate = async (
             queueInfo: null,
         };
 
-        // Add provider attribution for upstream provider errors
+        // Add provider attribution and upstream details for provider errors
         if (error instanceof ProviderError) {
             responseObj.provider = error.provider;
+            responseObj.upstreamStatus = error.upstreamStatus;
+            responseObj.upstreamBody = error.upstreamBody;
         }
 
         // Add queue info for 429 errors
