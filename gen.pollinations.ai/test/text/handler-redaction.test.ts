@@ -1,16 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { generateTextPortkey } from "../../src/text/generateTextPortkey.js";
 import {
     handleChatCompletionLocal,
     handleSimpleTextLocal,
 } from "../../src/text/handler.js";
 
-vi.mock("../../src/text/generateTextPortkey.js", () => ({
-    generateTextPortkey: vi.fn(),
-}));
-
 afterEach(() => {
-    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
 });
 
 function createTextContext() {
@@ -38,18 +33,24 @@ function createTextContext() {
 
 describe("text handler redaction", () => {
     it("redacts secrets from OpenAI-compatible JSON responses", async () => {
-        vi.mocked(generateTextPortkey).mockResolvedValueOnce({
-            model: "openai",
-            choices: [
-                {
-                    index: 0,
-                    message: {
-                        role: "assistant",
-                        content: "use sk_live_abcdefghi",
-                    },
-                    finish_reason: "stop",
-                },
-            ],
+        vi.stubGlobal("fetch", async () => {
+            return {
+                ok: true,
+                json: async () => ({
+                    model: "openai",
+                    choices: [
+                        {
+                            index: 0,
+                            message: {
+                                role: "assistant",
+                                content: "use sk_live_abcdefghi",
+                            },
+                            finish_reason: "stop",
+                        },
+                    ],
+                }),
+                headers: new Headers({ "content-type": "application/json" }),
+            } as Response;
         });
 
         const response = await handleChatCompletionLocal(createTextContext(), {
@@ -64,20 +65,20 @@ describe("text handler redaction", () => {
 
     it("redacts secrets from streamed text responses", async () => {
         const encoder = new TextEncoder();
-        vi.mocked(generateTextPortkey).mockResolvedValueOnce({
-            model: "openai",
-            stream: true,
-            responseStream: new ReadableStream<Uint8Array>({
-                start(controller) {
-                    controller.enqueue(encoder.encode("data: Bear"));
-                    controller.enqueue(encoder.encode("er sk_live_abc"));
-                    controller.enqueue(encoder.encode("defghi\n\n"));
-                    controller.close();
-                },
-            }),
-            choices: [
-                { index: 0, delta: { content: "" }, finish_reason: null },
-            ],
+
+        vi.stubGlobal("fetch", async () => {
+            return {
+                ok: true,
+                body: new ReadableStream<Uint8Array>({
+                    start(controller) {
+                        controller.enqueue(encoder.encode("data: Bear"));
+                        controller.enqueue(encoder.encode("er sk_live_abc"));
+                        controller.enqueue(encoder.encode("defghi\n\n"));
+                        controller.close();
+                    },
+                }),
+                headers: new Headers({ "content-type": "text/event-stream" }),
+            } as unknown as Response;
         });
 
         const response = await handleSimpleTextLocal(createTextContext(), {
